@@ -104,11 +104,9 @@ namespace ThemePacker
             return entries;
         }
 
-        public static Size Canvas = new Size(1024,1024);
-
-        private static bool ProcessLayout(List<Entry> entries)
+        private static bool ProcessLayout(List<Entry> entries, Size size)
         {
-            var freeAreas = new List<Rectangle?> { new Rectangle(5, 5, Canvas.Width-10, Canvas.Height-10) };
+            var freeAreas = new List<Rectangle?> { new Rectangle(5, 5, size.Width-10, size.Height-10) };
 
 #if false
             var itemsSorting = new List<Entry>(entries);
@@ -261,17 +259,19 @@ namespace ThemePacker
             return true;
         }
 
+        private static readonly int[] SizesToTry = { 1024, 1536, 2048, 3072, 4096 };
         private static void RenderAndSave(List<Entry> entries, string outputFile)
         {
-            int[] sizesToTry = { 1024, 1536, 2048, 3072, 4096 };
             int wSize = 0;
             int hSize = 0;
+
+            var size = new Size(SizesToTry[0], SizesToTry[0]);
 
             bool measured = false;
             Bitmap target;
             while (true)
             {
-                target = new Bitmap(Canvas.Width, Canvas.Height, PixelFormat.Format32bppArgb);
+                target = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
                 using (Graphics g = Graphics.FromImage(target))
                 {
                     g.CompositingQuality = CompositingQuality.AssumeLinear;
@@ -306,13 +306,13 @@ namespace ThemePacker
                             }
                         }
 
-                        if (!ProcessLayout(entries))
+                        if (!ProcessLayout(entries, size))
                         {
-                            if (Canvas.Height > Canvas.Width)
+                            if (size.Height > size.Width)
                                 wSize++;
                             else
                                 hSize++;
-                            Canvas = new Size(sizesToTry[wSize], sizesToTry[hSize]);
+                            size = new Size(SizesToTry[wSize], SizesToTry[hSize]);
 
                             target.Dispose();
                             continue;
