@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemePacker", "ThemePacker\ThemePacker.csproj", "{87D035C5-3C31-43D4-87B4-5B8B1A1AD624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThemeUnpacker", "ThemeUnpacker\ThemeUnpacker.csproj", "{795CEBE5-A9D2-4441-B780-B2A199E81B74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87D035C5-3C31-43D4-87B4-5B8B1A1AD624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D035C5-3C31-43D4-87B4-5B8B1A1AD624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D035C5-3C31-43D4-87B4-5B8B1A1AD624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D035C5-3C31-43D4-87B4-5B8B1A1AD624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795CEBE5-A9D2-4441-B780-B2A199E81B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795CEBE5-A9D2-4441-B780-B2A199E81B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795CEBE5-A9D2-4441-B780-B2A199E81B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795CEBE5-A9D2-4441-B780-B2A199E81B74}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
