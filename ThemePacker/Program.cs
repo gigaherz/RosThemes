@@ -31,7 +31,10 @@ namespace ThemePacker
                 values++;
                 switch (values)
                 {
-                    case 1: bitmapPath = arg; break;
+                    case 1:
+                        bitmapPath = arg;
+                        outputFile = bitmapPath + ".pack";
+                        break;
                     case 2: outputFile = arg; break;
                 }
             }
