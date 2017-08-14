@@ -333,9 +333,8 @@ namespace ThemePacker
 
             var bitmap = Path.Combine(Path.GetDirectoryName(outputFile), Path.GetFileNameWithoutExtension(outputFile) + ".png");
             target.Save(bitmap);
-            File.WriteAllLines(outputFile, 
-                new[] {
-                    $"#Bitmap={bitmap}",
+            File.WriteAllLines(outputFile,  new[] {
+                    $"#Bitmap={Path.GetFileNameWithoutExtension(outputFile) + ".png"}",
                 }.Concat(entries.Select(b => $"{b.FileName}={b.X},{b.Y},{b.RealW},{b.RealH},{b.Image.PixelFormat}")));
         }
     }

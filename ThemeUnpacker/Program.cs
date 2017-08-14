@@ -55,8 +55,11 @@ namespace ThemeUnpacker
 
         static void Unpack(string metadata, string output)
         { 
-            if (!Directory.Exists(output))
-                Directory.CreateDirectory(output);
+            var file = new FileInfo(metadata);
+            var dir = new DirectoryInfo(output);
+
+            if (!dir.Exists)
+                dir.Create();
 
 #if false
             string orig = null;
@@ -87,7 +90,12 @@ namespace ThemeUnpacker
 #endif
                                 case "Bitmap":
                                     if (image == null)
-                                        image = new Bitmap(new FileStream(metaValue, FileMode.Open, FileAccess.Read, FileShare.Read));
+                                    {
+                                        string path = metaValue;
+                                        if (!Path.IsPathRooted(path))
+                                            path = Path.Combine(file.DirectoryName ?? ".", metaValue);
+                                        image = new Bitmap(new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read));
+                                    }
                                     break;
                             }
                         }
@@ -304,9 +312,6 @@ namespace ThemeUnpacker
 
             // Go back and set the bitmap data offset
             bitmapData.SetInt(2, bitmapData.Count);
-
-            while (bitmapData.Count % 4 != 0)
-                bitmapData.Add(0);
 
             File.WriteAllBytes(fileName, bitmapData.ToArray());
         }
