@@ -45,8 +45,7 @@ namespace ThemePacker
                 return;
             }
 
-            var entries = Scan(bitmapPath);
-            RenderAndSave(entries, outputFile);
+            Pack(outputFile, bitmapPath);
         }
 
         private static void DisplayHelp()
@@ -54,6 +53,12 @@ namespace ThemePacker
             Console.WriteLine($"Command Line: {AppDomain.CurrentDomain.FriendlyName} <bitmap folder> [<pack file>] [<options>]");
             Console.WriteLine("Options:");
             Console.WriteLine("\tNothing here yet.");
+        }
+
+        static void Pack(string outputFile, string bitmapPath)
+        {
+            var entries = Scan(bitmapPath);
+            RenderAndSave(entries, outputFile);
         }
 
         public static List<Entry> Scan(string path)
