@@ -1,11 +1,4 @@
 #include "stdafx.h"
-#include <vector>
-#include <algorithm>
-#include <regex>
-#include <fstream>
-#include <shlwapi.h>
-#include <set>
-#include <memory>
 
 using namespace std;
 using namespace Gdiplus;
@@ -232,7 +225,7 @@ void Unpack(const wstring& metadata, const wstring& output)
     if (!DirectoryExists(output))
         CreateDirectory(output.c_str(), nullptr);
 
-    auto_ptr<Bitmap> image;
+    Bitmap* image = nullptr;
 
     wregex line_regex(L"^([^=]+)=([0-9]+),([0-9]+),([0-9]+),([0-9]+),(.*)$",
         regex_constants::ECMAScript | regex_constants::icase);
@@ -255,22 +248,27 @@ void Unpack(const wstring& metadata, const wstring& output)
                 auto metaValue = wstring(results[2].first, results[2].second);
                 if (propName == wstring(L"Bitmap"))
                 {
-                    if (!image.get())
+                    if (!image)
                     {
                         wstring path = metaValue;
                         if (PathIsRelative(path))
                             path = PathCombine(PathGetDirectory(metadata), metaValue);
-                        auto bmp = new Bitmap(path.c_str(), FALSE);
-                        if (!bmp)
+                        image = new Bitmap(path.c_str(), FALSE);
+                        if (!image || FAILED(image->GetLastStatus()))
                         {
                             wcerr << "Bitmap path could not be loaded: " << path << endl;
                             return;
                         }
-                        image = auto_ptr<Bitmap>(bmp);
                     }
                 }
             }
             continue;
+        }
+
+        if (!image)
+        {
+            wcerr << "Bitmap path not present in the pack file." << endl;
+            return;
         }
 
         if (commentChar > 0)
@@ -304,4 +302,6 @@ void Unpack(const wstring& metadata, const wstring& output)
 #endif
         }
     }
+
+    delete image;
 }

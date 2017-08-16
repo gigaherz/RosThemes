@@ -7,14 +7,19 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+#include <cstdio>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <regex>
+#include <fstream>
+#include <set>
+#include <memory>
 
 #include <windows.h>
 #include <gdiplus.h>
-
-#include <string>
-#include <iostream>
+#include <shlwapi.h>
 
 using namespace std;
 using namespace Gdiplus;

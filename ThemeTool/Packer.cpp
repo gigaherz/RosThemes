@@ -390,7 +390,7 @@ static void RenderAndSave(vector<Entry>& entries, const wstring& outputFile)
 
     auto output = wofstream(outputFile.c_str(), ios::out);
 
-    output << L"#Bitmap = " << PathGetFileNameWithoutExtension(outputFile) << L".png" << endl;
+    output << L"#Bitmap=" << PathGetFileNameWithoutExtension(outputFile) << L".png" << endl;
 
     for (auto& entry : entries)
     {
