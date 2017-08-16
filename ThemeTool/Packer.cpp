@@ -1,11 +1,9 @@
 #include "Precompiled.h"
-#include <vector>
-#include <algorithm>
-#include <regex>
+
 #include <fstream>
-#include <shlwapi.h>
-#include <memory>
-#include <queue>
+
+using namespace std;
+using namespace Gdiplus;
 
 class Entry
 {
@@ -35,7 +33,7 @@ public:
     RectF LineNumberSize;
 };
 
-static int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
+static int GetEncoderClsid(PCWSTR format, CLSID* pClsid)
 {
     UINT  num = 0;          // number of image encoders
     UINT  size = 0;         // size of the image encoder array in bytes
@@ -89,11 +87,11 @@ static vector<Entry> Scan(const wstring& path)
     {
         do
         {
-            wstring fullName = PathCombine(path, fd.cFileName);
+            wstring fullName = Path::Combine(path, fd.cFileName);
             
             Bitmap* src = new Bitmap(fullName.c_str());
             
-            auto name = PathGetFileNameWithoutExtension(fd.cFileName);
+            auto name = Path::GetFileNameWithoutExtension(fd.cFileName);
 
             auto underscore = name.find_first_of('_');
             if (underscore >= 0)
@@ -299,10 +297,10 @@ static void RenderAndSave(vector<Entry>& entries, const wstring& outputFile)
 
     auto size = Size(SizesToTry[wSize], SizesToTry[hSize]);
 
-    auto fn = PathGetFileNameWithoutExtension(outputFile);
+    auto fn = Path::GetFileNameWithoutExtension(outputFile);
     fn.append(L".png");
 
-    auto bitmap = PathCombine(PathGetDirectory(outputFile), fn);
+    auto bitmap = Path::Combine(Path::GetDirectory(Path::GetFullName(outputFile)), fn);
 
     bool measured = false;
     while (true)
@@ -390,7 +388,7 @@ static void RenderAndSave(vector<Entry>& entries, const wstring& outputFile)
 
     auto output = wofstream(outputFile.c_str(), ios::out);
 
-    output << L"#Bitmap=" << PathGetFileNameWithoutExtension(outputFile) << L".png" << endl;
+    output << L"#Bitmap=" << Path::GetFileNameWithoutExtension(outputFile) << L".png" << endl;
 
     for (auto& entry : entries)
     {

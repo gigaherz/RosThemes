@@ -1,64 +1,20 @@
 #include "Precompiled.h"
 
-wstring PathCombineW(const wstring& path1, const wstring& path2)
-{
-    auto combined = wstring(path1);
-    if (*(path1.end() - 1) != L'\\')
-    {
-        combined.append(1, L'\\');
-    }
-    combined.append(path2);
-    return combined;
-}
+#include <iostream>
 
-BOOL PathIsRelativeW(const wstring& path)
-{
-    return PathIsRelativeW(path.c_str());
-}
-
-wstring PathGetDirectory(const wstring& path)
-{
-    WCHAR fullpath[MAX_PATH];
-    WCHAR drive[_MAX_DRIVE];
-    WCHAR directory[_MAX_DIR];
-    GetFullPathName(path.c_str(), _countof(fullpath), fullpath, nullptr);
-    _wsplitpath(fullpath, drive, directory, nullptr, nullptr);
-
-    wstring result;
-    result.append(drive);
-    result.append(directory);
-    return result;
-}
-
-wstring PathGetFileNameWithoutExtension(const wstring& path)
-{
-    WCHAR file[_MAX_FNAME];
-    _wsplitpath(path.c_str(), nullptr, nullptr, file, nullptr);
-    return wstring(file);
-}
-
-wstring PathGetExtension(const wstring& path)
-{
-    WCHAR extension[_MAX_EXT];
-    _wsplitpath(path.c_str(), nullptr, nullptr, nullptr, extension);
-    return wstring(extension);
-}
-
-BOOL FileExists(const wstring& path)
-{
-    auto attrs = GetFileAttributes(path.c_str());
-    return (attrs != INVALID_FILE_ATTRIBUTES) && !(attrs & FILE_ATTRIBUTE_DIRECTORY);
-}
-
-BOOL DirectoryExists(const wstring& path)
-{
-    auto attrs = GetFileAttributes(path.c_str());
-    return (attrs != INVALID_FILE_ATTRIBUTES) && (attrs & FILE_ATTRIBUTE_DIRECTORY);
-}
+using namespace std;
+using namespace Gdiplus;
 
 void DisplayHelp(wstring arg0)
 {
-    wcout << L"Command Line: " << arg0 << L" <mode> <pack file> [<output folder>] [<options>]" << endl;
+    wcout << L"Command Line: " << Path::GetFileName(arg0) << L" <mode> <pack file> [<folder>] [<options>]" << endl;
+    wcout << L"Arguments:" << endl;
+    wcout << L"\t<mode>        One of the mode flags below." << endl;
+    wcout << L"\t<pack file>   Metadata file with the instructions on how to unpack." << endl;
+    wcout << L"\t<folder>      The folder to scan (pack) or extract to (unpack)." << endl;
+    wcout << L"Modes:" << endl;
+    wcout << L"\t-u, -unpack   Unpack combined image into separate bitmaps." << endl;
+    wcout << L"\t-p, -pack     Pack separate bitmaps into combined image." << endl;
     wcout << L"Options:" << endl;
     wcout << L"\tNothing here yet." << endl;
 }
@@ -76,7 +32,7 @@ void wmain(int argc, PCWSTR* argv)
         wstring arg = argv[i];
         if (arg.size() > 0 && (arg[0] == L'-' || arg[0] == L'/'))
         {
-            if (wcscmp(arg.c_str() + 1, L"U") == 0 || wcscmp(arg.c_str() + 1, L"unpack") == 0)
+            if (wcscmp(arg.c_str() + 1, L"u") == 0 || wcscmp(arg.c_str() + 1, L"unpack") == 0)
             {
                 if (mode >= 0)
                 {
@@ -86,8 +42,7 @@ void wmain(int argc, PCWSTR* argv)
                 }
                 mode = 0;
             }
-            else
-            if (wcscmp(arg.c_str() + 1, L"P") == 0 || wcscmp(arg.c_str() + 1, L"pack") == 0)
+            else if (wcscmp(arg.c_str() + 1, L"p") == 0 || wcscmp(arg.c_str() + 1, L"pack") == 0)
             {
                 if (mode >= 0)
                 {

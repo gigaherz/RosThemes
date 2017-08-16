@@ -1,5 +1,10 @@
 #include "Precompiled.h"
 
+#include <iostream>
+#include <regex>
+#include <fstream>
+#include <set>
+
 using namespace std;
 using namespace Gdiplus;
 
@@ -222,7 +227,7 @@ static void SaveCustomBmp(wstring fileName, Bitmap& source, Rect rect, PixelForm
 
 void Unpack(const wstring& metadata, const wstring& output)
 {
-    if (!DirectoryExists(output))
+    if (!Path::DirectoryExists(output))
         CreateDirectory(output.c_str(), nullptr);
 
     Bitmap* image = nullptr;
@@ -251,8 +256,8 @@ void Unpack(const wstring& metadata, const wstring& output)
                     if (!image)
                     {
                         wstring path = metaValue;
-                        if (PathIsRelative(path))
-                            path = PathCombine(PathGetDirectory(metadata), metaValue);
+                        if (Path::IsRelative(path))
+                            path = Path::Combine(Path::GetDirectory(Path::GetFullName(metadata)), metaValue);
                         image = new Bitmap(path.c_str(), FALSE);
                         if (!image || FAILED(image->GetLastStatus()))
                         {
@@ -298,7 +303,7 @@ void Unpack(const wstring& metadata, const wstring& output)
             using (auto bb = new Bitmap(new FileStream(Path.Combine(orig, fileName), FileMode.Open, FileAccess.Read, FileShare.Read)))
                 SaveCustomBmp(Path.Combine(output, fileName), b, new Rectangle(x, y, w, h), fmt, bb.Palette);
 #else
-            SaveCustomBmp(PathCombine(output, fileName), *image, Rect(x, y, w, h), fmt, nullptr);
+            SaveCustomBmp(Path::Combine(output, fileName), *image, Rect(x, y, w, h), fmt, nullptr);
 #endif
         }
     }

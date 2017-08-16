@@ -2,34 +2,29 @@
 
 #include "targetver.h"
 
-#include <cstdio>
 #include <string>
-#include <iostream>
 #include <vector>
-#include <algorithm>
-#include <regex>
-#include <fstream>
-#include <set>
-#include <memory>
 
 #include <windows.h>
-#include <shlwapi.h>
 #include <gdiplus.h>
-
-using namespace std;
-using namespace Gdiplus;
 
 // Utilities
 
-wstring PathCombineW(const wstring& path1, const wstring& path2);
-BOOL PathIsRelativeW(const wstring& path);
-wstring PathGetDirectory(const wstring& path);
-wstring PathGetFileNameWithoutExtension(const wstring& path);
-wstring PathGetExtension(const wstring& path);
-BOOL FileExists(const wstring& path);
-BOOL DirectoryExists(const wstring& path);
+namespace Path
+{
+    std::wstring Combine(const std::wstring& path1, const std::wstring& path2);
+    bool IsRelative(const std::wstring& path);
+    std::wstring GetFullName(const std::wstring& path);
+    std::wstring GetDirectory(const std::wstring& path);
+    std::wstring GetFileName(const std::wstring& path);
+    std::wstring GetFileNameWithoutExtension(const std::wstring& path);
+    std::wstring GetExtension(const std::wstring& path);
+    DWORD GetAttributes(const std::wstring& path);
+    bool FileExists(const std::wstring& path);
+    bool DirectoryExists(const std::wstring& path);
+}
 
-// Mode implementations
+// Tasks
 
-void Unpack(const wstring& metadata, const wstring& output);
-void Pack(const wstring& metadata, const wstring& source);
+void Unpack(const std::wstring& metadata, const std::wstring& output);
+void Pack(const std::wstring& metadata, const std::wstring& source);
