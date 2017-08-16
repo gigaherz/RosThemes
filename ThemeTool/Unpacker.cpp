@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "Precompiled.h"
 
 using namespace std;
 using namespace Gdiplus;

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "Precompiled.h"
 
 wstring PathCombineW(const wstring& path1, const wstring& path2)
 {
